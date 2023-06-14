@@ -57,7 +57,7 @@ class Ultra_Fast_Lane_Detection_v2
 public:
 	Ultra_Fast_Lane_Detection_v2(string model_path);
 	Mat detect(Mat& cv_image);
-	~Ultra_Fast_Lane_Detection_v2();  // Îö¹¹º¯Êı, ÊÍ·ÅÄÚ´æ
+	~Ultra_Fast_Lane_Detection_v2();  // ææ„å‡½æ•°, é‡Šæ”¾å†…å­˜
 
 private:
 	Mat normalize_(Mat img);
@@ -171,16 +171,10 @@ Mat Ultra_Fast_Lane_Detection_v2::detect(Mat& srcimg)
 	Mat dstimg = this->normalize_(img);
 	Mat blob = blobFromImage(dstimg);
 
-	cout << "outnames : " << endl;
-	vector<string> outnames = this->net.getUnconnectedOutLayersNames();
-	for (int i = 0; i < outnames.size(); i++)
-	{
-		cout << outnames[i] << endl;
-	}
-
+	net.enableWinograd(false);
 	this->net.setInput(blob);
 	vector<Mat> outs;
-	this->net.forward(outs, this->net.getUnconnectedOutLayersNames());   // ¿ªÊ¼ÍÆÀí
+	this->net.forward(outs, this->net.getUnconnectedOutLayersNames());   // å¼€å§‹æ¨ç†
 
 	////pred2coords
 	const float* loc_row = (float*)outs[3].data;
